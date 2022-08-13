@@ -6,14 +6,14 @@ import java.util.*
 
 @Entity(name = "book")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
-class Book (
+data class Book (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
     @Column(name = "author", nullable = false, length = 180)
-    var author: String? = null,
+    var author:  String = "",
 
     @Column(name = "launch_date", nullable = false)
     @Temporal(TemporalType.DATE)
