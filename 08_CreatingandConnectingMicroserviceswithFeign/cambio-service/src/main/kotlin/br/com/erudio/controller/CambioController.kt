@@ -14,21 +14,23 @@ import java.math.RoundingMode
 @RestController
 @RequestMapping("cambio-service")
 class CambioController {
-    @Autowired
-    private val environment: Environment? = null
 
     @Autowired
-    private val repository: CambioRepository? = null
+    private lateinit var environment: Environment
+
+    @Autowired
+    private lateinit var repository: CambioRepository
+
     @GetMapping(value = ["/{amount}/{from}/{to}"])
     fun getCambio(
         @PathVariable("amount") amount: BigDecimal?,
-        @PathVariable("from") from: String?,
-        @PathVariable("to") to: String?
+        @PathVariable("from") from: String,
+        @PathVariable("to") to: String
     ): Cambio {
-        val cambio = repository!!.findByFromAndTo(from, to) ?: throw RuntimeException("Currency Unsupported")
-        val port = environment!!.getProperty("local.server.port")
+        val cambio = repository.findByFromAndTo(from, to) ?: throw RuntimeException("Currency Unsupported")
+        val port = environment.getProperty("local.server.port")
         val conversionFactor = cambio.conversionFactor
-        val convertedValue = conversionFactor!!.multiply(amount)
+        val convertedValue = conversionFactor.multiply(amount)
         cambio.convertedValue = convertedValue.setScale(2, RoundingMode.CEILING)
         cambio.environment = port
         return cambio
