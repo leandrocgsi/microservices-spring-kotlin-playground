@@ -35,4 +35,20 @@ class CambioController {
         cambio.environment = port
         return cambio
     }
+    @GetMapping(value = ["/v0/{amount}/{from}/{to}"])
+    fun getCambioV0(
+        @PathVariable("amount") amount: BigDecimal?,
+        @PathVariable("from") from: String,
+        @PathVariable("to") to: String
+    ): Cambio {
+        val port = environment.getProperty("local.server.port")
+        return Cambio(
+            id = 1L,
+            from = from,
+            to = to,
+            conversionFactor = BigDecimal.ONE,
+            convertedValue = BigDecimal.ONE,
+            environment = "PORT $port"
+        )
+    }
 }

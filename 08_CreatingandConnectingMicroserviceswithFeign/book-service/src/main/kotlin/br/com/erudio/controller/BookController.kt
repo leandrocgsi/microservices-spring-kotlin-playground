@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
+import java.util.*
+
 
 @RestController
 @RequestMapping("book-service")
@@ -28,7 +30,7 @@ class BookController {
     @GetMapping(value = ["/{id}/{currency}"])
     fun findBook(
         @PathVariable("id") id: Long,
-        @PathVariable("currency") currency: String?
+        @PathVariable("currency") currency: String
     ): Book {
         val book: Book = repository.findById(id)
             .orElseThrow { RuntimeException("Book not Found") }
@@ -36,10 +38,11 @@ class BookController {
         val port = environment.getProperty("local.server.port")
         book.environment = "$port FEIGN"
         book.price = cambio!!.convertedValue
+        book.currency = currency
         return book
     }
 
-    @GetMapping(value = ["/v1/{id}/{currency}"])
+    @GetMapping(value = ["/v2/{id}/{currency}"])
     fun findBookV1(
         @PathVariable("id") id: Long,
         @PathVariable("currency") currency: String
@@ -66,4 +69,34 @@ class BookController {
         book.price = cambio!!.convertedValue
         return book
     }
+
+    @GetMapping(value = ["/v1/{id}/{currency}"], produces = ["application/json"])
+    fun findBookV1(
+        @PathVariable("id") id: Long?,
+        @PathVariable("currency") currency: String?
+    ): Book? {
+        val port = environment.getProperty("local.server.port")
+        return Book(
+            id = 1L,
+            author = "Nigel Poulton",
+            title = "Docker Deep Dive",
+            launchDate = Date(),
+            price = 15.8.toDouble(),
+            currency = "BRL",
+            environment = port
+        )
+    }
+
+    @GetMapping(value = ["/v0/{id}/{currency}"], produces = ["application/json"])
+    fun findBookV0(
+        @PathVariable("id") id: Long,
+        @PathVariable("currency") currency: String?
+    ): Book? {
+        val port = environment.getProperty("local.server.port")
+        val book = repository.findById(id)
+            .orElseThrow { RuntimeException("Book not Found") }
+        book.environment = port
+        return book
+    }
+
 }
