@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ApiGatewayConfiguration {
+
     @Bean
     fun gatewayRouter(builder: RouteLocatorBuilder): RouteLocator {
         return builder.routes()

@@ -36,7 +36,9 @@ class BookController {
             .orElseThrow { RuntimeException("Book not Found") }
         val cambio = proxy.getCambio(book.price, "USD", currency)
         val port = environment.getProperty("local.server.port")
-        book.environment = "$port FEIGN"
+        //book.environment = "$port FEIGN"
+        "BOOK port: $port CAMBIO port: ${cambio!!.environment}"
+
         book.price = cambio!!.convertedValue
         book.currency = currency
         return book
