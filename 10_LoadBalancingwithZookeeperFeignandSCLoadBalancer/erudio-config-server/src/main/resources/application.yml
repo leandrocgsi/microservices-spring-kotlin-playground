@@ -7,7 +7,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/leandrocgsi/config-server
+          uri: https://github.com/leandrocgsi/config-server-ms-kotlin
           # username: username
           # password: password
           # default-label: main

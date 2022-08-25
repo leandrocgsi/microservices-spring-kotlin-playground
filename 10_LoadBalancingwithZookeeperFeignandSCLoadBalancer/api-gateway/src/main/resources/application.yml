@@ -6,12 +6,8 @@ spring:
   cloud:
     zookeeper:
       connect-string: localhost:2181
-        #cloud:
-        #gateway:
-        #discovery:
-        #locator:
-      #enabled: true
-logging:
-  level:
-    '[org.apache.zookeeper.ClientCnxn]': WARN
-    #lower-case-service-id: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true

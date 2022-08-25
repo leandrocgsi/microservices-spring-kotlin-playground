@@ -1,11 +1,16 @@
 package br.com.erudio.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import jakarta.persistence.*
-import java.util.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
+import jakarta.persistence.Transient
+import java.util.Date
 
 @Entity(name = "book")
-@JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Book (
 
     @Id
@@ -13,21 +18,21 @@ data class Book (
     var id: Long = 0,
 
     @Column(name = "author", nullable = false, length = 180)
-    var author:  String = "",
+    var author: String = "",
+
+    @Column(name = "title", nullable = false, length = 250)
+    var title: String = "",
 
     @Column(name = "launch_date", nullable = false)
     @Temporal(TemporalType.DATE)
     var launchDate: Date? = null,
 
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     var price: Double? = null,
 
-    @Column(nullable = false, length = 250)
-    var title:  String = "",
+    @Transient
+    var currency: String = "",
 
     @Transient
-    var currency:  String = "",
-
-    @Transient
-    var environment: String? = null
+    var environment: String? = ""
 )
